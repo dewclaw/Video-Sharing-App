@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Index page</title>
+</head>
+
+<body>
+    <p>This is just straight HTML</p>
+
+    <div id='VideoApp'>
+        <h1> {{ message }} </h1>
+        <video v-if="isDownloaded" width="320" height="240" controls>
+            <source src="http://localhost:8000/video" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <button v-on:click="showUploadForm = !showUploadForm">Show Form</button><br>
+        <!-- <label v-if="showUploadForm" for="upload"> Choose a video for upload:</label> -->
+
+        <form id="fileUploadForm" v-if="showUploadForm" id="uploadbanner" enctype="multipart/form-data" method="post" action="#"
+            onsubmit="return false;" v-on:click="submitVideoForUpload()">
+            <input id="fileupload" name="myfile" type="file" />
+            <input type="submit" value="submit" id="submit" />
+        </form>
+
+        <!-- <input v-if="showUploadForm" type="file" id="videoSubmit" name="videoSubmit" accept="video/*"> -->
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        var VideoApp = new Vue({
+            el: '#VideoApp',
+            data: {
+                name: "Frank",
+                message: `Hello `,
+                users: [],
+                isDownloaded: false,
+                showUploadForm: false
+            },
+            methods: {
+                submitVideoForUpload: function(){
+                    var fileInput = $("#fileUploadForm")
+                    var video = fileInput.files[0]
+                    var formData = new FormData()
+                    formData.append('video', video)
+                    console.log('button pressed')
+                    $.ajax({
+                        type: 'POST',
+                        url: 'http://localhost:8000/upload',
+                        data: formData,
+                        success: (responseData, textStatus, jqXHR) => {
+                            console.log(JSON.parse(responseData))
+                        },
+                        error: (error) => {
+                            console.log(error)
+                        }
+                    })
+                },
+                invertBool: function (a) {
+                    return !a
+                },
+                getVideo: function (id) {
+                    videoRequest = {
+                        videoID: id
+                    }
+                    $.ajax({
+                        type: 'GET',
+                        url: 'http://localhost:8000/video',
+                        crossDomain: true,
+                        dataType: 'json',
+                        data: JSON.stringify(videoRequest),
+                        success: (responseData) => {
+                            console.log(
+                                `Received DATA from /showusers -------- \n First crazy asshole ${responseData[0]}`
+                            )
+                            this.message = responseData[0].firstName
+                        },
+                        error: (error) => {
+                            alert('GET failed')
+                        }
+                    })
+                },
+                getUsers: function () {
+                    $.ajax({
+                        type: 'GET',
+                        url: 'http://localhost:8000/showusers',
+                        crossDomain: true,
+                        dataType: 'json',
+                        success: (responseData) => {
+                            console.log(
+                                `Received DATA from /showusers -------- \n First crazy asshole ${responseData[0]}`
+                            )
+                            this.message = responseData[0].firstName
+                        },
+                        error: (error) => {
+                            alert('GET failed')
+                        }
+                    })
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
