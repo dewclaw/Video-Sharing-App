@@ -20,9 +20,9 @@
         <button v-on:click="showUploadForm = !showUploadForm">Show Form</button><br>
         <!-- <label v-if="showUploadForm" for="upload"> Choose a video for upload:</label> -->
 
-        <form id="fileUploadForm" v-if="showUploadForm" id="uploadbanner" enctype="multipart/form-data" method="post" action="#"
-            onsubmit="return false;" v-on:click="submitVideoForUpload()">
+        <form id="fileUploadForm" v-if="showUploadForm" id="uploadbanner" enctype="multipart/form-data" method="post" action="/upload" onsubmit="" v-on:click="">
             <input id="fileupload" name="myfile" type="file" />
+            <input id="emailaddress" name ="emailaddress" type="email" placeholder="Emaill Address"> 
             <input type="submit" value="submit" id="submit" />
         </form>
 
@@ -44,7 +44,7 @@
                 showUploadForm: false
             },
             methods: {
-                submitVideoForUpload: function(){
+                submitVideoForUpload: function () {
                     var fileInput = $("#fileUploadForm")
                     var video = fileInput.files[0]
                     var formData = new FormData()

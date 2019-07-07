@@ -4,8 +4,8 @@ let Routes = require('./routes/routes.js')
 let DBManager = require('./lib/DBManager')
 let fs = require('fs')
 let path = require('path')
-
-
+let BodyBuilder = require('./lib/BodyBuilder.js')
+let BodyParser = require('./lib/bodyparser.js')
 // Connect to DB     
 DBManager.DBConnect()
 let index = fs.readFileSync('./html/index.html', 'utf8')
@@ -13,9 +13,8 @@ let videoTemplate = fs.readFileSync('./html/video.html', 'utf8')
 
 
 let server = http.createServer((request, response) => {
-
+    
     console.log(`INCOMING REQUEST: ${request.connection.remoteAddress} -----> ${request.method} -----> ${request.url}`)
-    // console.log(request.headers)
 
     switch (request.url) {
         case '/':
@@ -98,16 +97,40 @@ let server = http.createServer((request, response) => {
 
             }
             break
-            case '/upload':
-                {
-                    if(request.method == 'POST')
-                    {
-                        const returnMessage = {
-                            content : "Video POST REQ RECEIVED"
+        case '/upload':
+            {
+                if (request.method == 'POST') {
+
+                    headerBoundryObj = BodyParser.formHeaderParser(request.headers)
+
+                    // console.log(headerBoundryObj)
+                    let contentType = request.headers["content-type"]
+
+                    BodyBuilder.bodyParser(request).then((body) => {
+                        // console.log(request.headers)
+                        // console.log(body)
+
+                        BodyBuilder.searchBody(body,headerBoundryObj);
+
+
+                        // console.log(contentType)
+                        if(contentType.includes("multipart/form-data; boundary=")){
+                            // console.log("Message is a multipart/form-data")
+                            // fs.writeFile('writtenBody', body, (error)=>{
+                            //     if (error) throw error;
+                            //     console.log("File Written")
+                            // })
+
+
+
+
                         }
-                        response.end(JSON.stringify(returnMessage))
-                    }
+                        response.end("RESPONSE")
+                    })
+
                 }
+            }
+            break
         default:
             response.end("No route defined")
     }

@@ -1,0 +1,11 @@
+------WebKitFormBoundarygAR6rKakI31zkGC7
+Content-Disposition: form-data; name="myfile"; filename="data0.txt"
+Content-Type: text/plain
+
+lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum
+lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum
+------WebKitFormBoundarygAR6rKakI31zkGC7
+Content-Disposition: form-data; name="emailaddress"
+
+
+------WebKitFormBoundarygAR6rKakI31zkGC7--
